@@ -1,0 +1,67 @@
+#MONTAR EN DOCKER
+#RUTA: "C:\DAW CLASE\2DAW\Optativa\adoptapet>"
+#COMANDO: docker build -t adoptapet:latest .
+#LEVANTAR CONTENEDOR: docker compose up -d
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: adoptapet-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: adoptapetdb
+      MYSQL_USER: adoptapet
+      MYSQL_PASSWORD: adoptapet
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - adoptapet-net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    image: adoptapet:latest
+    container_name: adoptapet-app
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/adoptapetdb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: adoptapet
+      SPRING_DATASOURCE_PASSWORD: adoptapet
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: com.mysql.cj.jdbc.Driver
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_DATABASE_PLATFORM: org.hibernate.dialect.MySQL8Dialect
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      SPRING_JPA_HIBERNATE_USE_NEW_ID_GENERATOR_MAPPINGS: false
+    ports:
+      - "8080:8080"
+    networks:
+      - adoptapet-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: adoptapet-phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_USER: root
+      PMA_PASSWORD: toor
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+    networks:
+      - adoptapet-net
+
+networks:
+  adoptapet-net:
+
+volumes:
+  mysql-data:

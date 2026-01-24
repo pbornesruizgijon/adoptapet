@@ -1,0 +1,12 @@
+com\example\adoptapet\model\Gato.class
+com\example\adoptapet\model\Perro.class
+com\example\adoptapet\model\Adopter.class
+com\example\adoptapet\model\MascotaEntity.class
+com\example\adoptapet\model\exceptions\AlreadyAdoptedException.class
+com\example\adoptapet\AdoptapetApplication.class
+com\example\adoptapet\model\Adoptable.class
+com\example\adoptapet\controller\PetController.class
+com\example\adoptapet\repository\AdopterRepository.class
+com\example\adoptapet\model\Mascota.class
+com\example\adoptapet\repository\MascotaRepository.class
+com\example\adoptapet\service\PetService.class
