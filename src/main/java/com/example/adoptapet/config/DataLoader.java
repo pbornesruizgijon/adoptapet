@@ -33,8 +33,10 @@ public class DataLoader {
             // Admin
             if (adopterRepo.findByNombre("admin").isEmpty()) {
                 Role adminRole = roleRepo.findByNombre("ADMIN").orElseThrow();
+                Role userRole = roleRepo.findByNombre("USER").orElseThrow();
                 Adopter admin = new Adopter("admin", "admin@email.com", "987654321", encoder.encode("admin"));
                 admin.getRoles().add(adminRole);
+                admin.getRoles().add(userRole);
                 adopterRepo.save(admin);
             }
         };
