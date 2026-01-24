@@ -35,7 +35,6 @@ public class DataLoader {
                 Role adminRole = roleRepo.findByNombre("ADMIN").orElseThrow();
                 Adopter admin = new Adopter("admin", "admin@email.com", "987654321", encoder.encode("admin"));
                 admin.getRoles().add(adminRole);
-                admin.getRoles().add(roleRepo.findByNombre("ADMIN").orElseThrow());
                 adopterRepo.save(admin);
             }
         };
