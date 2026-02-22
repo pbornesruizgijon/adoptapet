@@ -1,0 +1,224 @@
+/* =========================================
+   FONDOS Y FORMAS (Consistentes)
+   ========================================= */
+body {
+    background: linear-gradient(90deg, #fde9d8 0%, #f9f5ec 15%, #f9f5ec 85%, #c3dae7 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 110px;
+    z-index: 0;
+}
+
+body::before {
+    left: 0;
+    background: linear-gradient(to top, #fae2be 60%, #f5b971 100%);
+    border-top-right-radius: 70px;
+    border-bottom-right-radius: 160px;
+}
+
+body::after {
+    right: 0;
+    background: linear-gradient(to bottom, #c3dae7 40%, #7ed4a6 100%);
+    border-top-left-radius: 60px;
+    border-bottom-left-radius: 130px;
+}
+
+/* =========================================
+   CONTENEDOR DE LA LISTA
+   ========================================= */
+.content.mascota-list {
+    margin: 40px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.mascota-grid {
+    display: grid;
+    /* Ajuste de columnas para que siempre estén centradas */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    justify-items: center;
+    /* Alinea las tarjetas al centro del carril */
+}
+
+/* =========================================
+   TARJETAS DE MASCOTAS
+   ========================================= */
+/* =========================================
+   TARJETAS DE MASCOTAS (CORREGIDO)
+   ========================================= */
+.mascota-card {
+    background: rgba(255, 255, 255, 0.4);
+    padding: 20px;
+    border-radius: 25px;
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    width: 100%;
+    max-width: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.mascota-card-link {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+    /* NUEVO: Forzamos al enlace a ser un contenedor flexible centrado */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.mascota-card img {
+    width: 200px;
+    height: 200px;
+    border-radius: 20px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    box-shadow: 0 8px 20px rgba(195, 218, 231, 0.8);
+    border: 5px solid white;
+
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Estilo rápido para el buscador */
+.search-wrapper {
+    display: flex;
+    justify-content: center;
+    /* Centrado horizontal */
+    align-items: center;
+    margin: 20px 0 40px 0;
+    /* Espaciado arriba y abajo */
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+#searchInput {
+    padding: 14px 25px;
+    width: 90%;
+    max-width: 550px;
+    /* Tamaño máximo para que no sea gigante en PC */
+    border-radius: 30px;
+    border: 2px solid #7ed4a6;
+    outline: none;
+    font-size: 1.1em;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    /* Sombra suave para dar profundidad */
+    transition: all 0.3s ease;
+}
+
+#searchInput:focus {
+    box-shadow: 0 6px 20px rgba(126, 212, 166, 0.3);
+    border-color: #68ca9c;
+    transform: translateY(-2px);
+    /* Pequeño efecto al hacer clic */
+}
+
+.mascota-card-link {
+    text-decoration: none;
+    color: inherit;
+    width: 100%;
+}
+
+.mascota-card-link:hover .mascota-card {
+    background: white;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(107, 79, 35, 0.1);
+}
+
+.mascota-nombre {
+    font-weight: 800;
+    font-size: 1.4em;
+    color: #6b4f23;
+    margin-bottom: 10px;
+    text-align: center;
+    display: block;
+}
+
+/* Etiqueta Adoptado dentro de la card */
+.mascota-card .adoptado {
+    background: #f5b971;
+    color: white;
+    font-weight: bold;
+    padding: 6px 20px;
+    border-radius: 50px;
+    font-size: 0.9em;
+    box-shadow: 0 4px 10px rgba(245, 185, 113, 0.3);
+    margin-top: 5px;
+}
+
+/* =========================================
+   TEXTOS CABECERA
+   ========================================= */
+h1 {
+    font-size: 3em;
+    font-weight: 800;
+    color: #6b4f23;
+    margin-bottom: 10px;
+}
+
+h2 {
+    font-size: 1.4em;
+    color: #7ed4a6;
+    font-weight: 600;
+    margin-bottom: 40px;
+}
+
+/* Ajuste móvil */
+@media (max-width: 768px) {
+
+    body::before,
+    body::after {
+        width: 40px;
+    }
+
+    h1 {
+        font-size: 2.2em;
+    }
+
+    .mascota-grid {
+        gap: 20px;
+    }
+}
+
+/* Unificar comportamiento de botones de admin en la card */
+.admin-actions-container a,
+.admin-actions-container button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    /* Altura fija para que sean iguales */
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    margin: 0;
+}
+
+/* Efecto hover igual para ambos */
+.admin-actions-container a:hover,
+.admin-actions-container button:hover {
+    transform: translateY(-2px);
+    filter: brightness(0.9);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

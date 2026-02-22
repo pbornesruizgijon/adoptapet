@@ -1,0 +1,129 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registro - AdoptaPet</title>
+    <link rel="stylesheet" href="/base.css">
+    <link rel="stylesheet" href="/index.css">
+    <style>
+        /* Ajuste para que la tarjeta de registro sea cómoda */
+        .registration-card {
+            margin: 60px auto 100px auto;
+            position: relative;
+            transform: none;
+            left: auto;
+            top: auto;
+            max-width: 480px;
+        }
+
+        /* Estilos para los indicadores de contraseña */
+        .password-hints {
+            margin-top: 10px;
+            background: #fdfdfd;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .hint {
+            font-size: 0.85em;
+            margin-bottom: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .text-danger {
+            color: #d9534f;
+        }
+
+        .text-success {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="hero" style="height: 300px; clip-path: ellipse(100% 100% at 50% 0%);">
+        <div class="herotitle" style="font-size: 3.5em; margin-top: 20px;">Únete a nosotros</div>
+    </div>
+
+    <div class="content login-card registration-card">
+        <h2 style="text-align: center; color: #6b4f23; margin-top: 0;">Crear Cuenta</h2>
+        <p style="color: #888; margin-bottom: 25px; font-size: 0.9em; text-align: center;">
+            Rellena tus datos para empezar a adoptar.
+        </p>
+
+        <div th:if="${error}" class="error" style="font-size: 0.9em; text-align: center; margin-bottom: 20px;"
+            th:text="${error}">
+        </div>
+
+        <form th:action="@{/registro}" th:object="${usuario}" method="post" class="auth-container">
+            <div class="input-group">
+                <label>Nombre de usuario:</label>
+                <input type="text" th:field="*{nombre}" placeholder="Ej: juan_adopta" required minlength="3"
+                    maxlength="20" />
+            </div>
+
+            <div class="input-group">
+                <label>Correo electrónico:</label>
+                <input type="email" th:field="*{email}" placeholder="tu@email.com" required />
+            </div>
+
+            <div class="input-group">
+                <label>Teléfono (9 dígitos):</label>
+                <input type="tel" th:field="*{telefono}" placeholder="600123456" pattern="\d{9}"
+                    title="Debe contener exactamente 9 números" required />
+            </div>
+
+            <div class="input-group">
+                <label>Contraseña:</label>
+                <input type="password" th:field="*{password}" id="passwordField" placeholder="Mínimo 8 caracteres"
+                    required oninput="validarPassword()" minlength="8" />
+
+                <div class="password-hints" id="passwordHints">
+                    <div id="req-longitud" class="hint text-danger">✖ Mínimo 8 caracteres</div>
+                    <div id="req-mayuscula" class="hint text-danger">✖ Al menos una mayúscula</div>
+                    <div id="req-numero" class="hint text-danger">✖ Al menos un número</div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-main" style="margin-top: 20px;">Registrarse ahora</button>
+        </form>
+
+        <div class="divider">o si ya tienes cuenta</div>
+
+        <div style="text-align: center;">
+            <a href="/" class="btn-outline">Volver al login</a>
+        </div>
+    </div>
+
+    <script>
+        function validarPassword() {
+            const pass = document.getElementById('passwordField').value;
+
+            // Lógica de validación (Regex)
+            const checks = {
+                'req-longitud': pass.length >= 8,
+                'req-mayuscula': /[A-Z]/.test(pass),
+                'req-numero': /[0-9]/.test(pass)
+            };
+
+            // Actualizar cada indicador
+            for (const [id, cumplido] of Object.entries(checks)) {
+                const el = document.getElementById(id);
+                if (cumplido) {
+                    el.classList.remove('text-danger');
+                    el.classList.add('text-success');
+                    el.innerHTML = "✔ " + el.innerText.substring(2);
+                } else {
+                    el.classList.remove('text-success');
+                    el.classList.add('text-danger');
+                    el.innerHTML = "✖ " + el.innerText.substring(2);
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

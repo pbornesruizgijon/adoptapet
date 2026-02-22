@@ -1,0 +1,21 @@
+# Ignorar la carpeta de compilación (MUY IMPORTANTE)
+/target/
+
+# Ignorar archivos de configuración de tu editor (Eclipse/IntelliJ/VSCode)
+.settings/
+.project
+.classpath
+.factorypath
+.idea/
+*.iml
+*.iws
+
+# Ignorar archivos temporales del sistema
+.DS_Store
+Thumbs.db
+
+# Ignorar logs
+/*.log
+
+# Opcional: Si tienes un archivo con contraseñas reales, ignóralo
+# /src/main/resources/application-secret.properties

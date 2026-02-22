@@ -1,0 +1,92 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AdoptaPet - Mascotas</title>
+    <link rel="stylesheet" href="/base.css">
+    <link rel="stylesheet" href="/lista.css">
+</head>
+
+<body>
+    <div class="content mascota-list">
+        <h1>Lista de mascotas para adopción</h1>
+        <h2>Elige la mascota que quieres conocer o adoptar</h2>
+
+        <div class="search-wrapper">
+            <input type="text" id="searchInput" onkeyup="filtrarMascotas()"
+                placeholder="🔍 Busca por nombre, perro o gato...">
+        </div>
+
+        <div
+            style="display: flex; justify-content: center; gap: 16px; margin-bottom: 30px; position: relative; z-index: 10;">
+            <a href="/lista?orden=nombre" class="principal-link" style="padding: 10px 20px; font-size: 1em;">Ordenar por
+                nombre</a>
+            <a href="/lista?orden=edad" class="principal-link" style="padding: 10px 20px; font-size: 1em;">Ordenar por
+                edad</a>
+        </div>
+
+        <div sec:authorize="hasAuthority('ADMIN')"
+            style="text-align:center; margin-bottom: 40px; position: relative; z-index: 10;">
+            <a href="/admin/agregar" class="principal-link" style="background: #68ca9c; color: white;">+ Agregar Nueva
+                Mascota</a>
+        </div>
+
+        <div class="mascota-grid" id="mascotaGrid">
+            <div class="mascota-card" th:each="m : ${mascotas}" th:data-tipo="${m.tipoMascota}">
+                <a th:href="@{'/detalle/' + ${m.id}}" class="mascota-card-link">
+                    <img th:src="${m.imagen}" alt="Foto de mascota" />
+                    <span class="mascota-nombre" th:text="${m.nombre}"></span>
+                    <span th:if="${m.adoptada}" class="adoptado">ADOPTADO</span>
+                </a>
+
+                <div sec:authorize="hasAuthority('ADMIN')" class="admin-actions-container"
+                    style="display: flex; justify-content: center; gap: 8px; margin-top: 15px; width: 100%; padding: 0 10px; box-sizing: border-box;">
+
+                    <a th:href="@{/admin/editar/{id}(id=${m.id})}"
+                        style="background: #7ed4a6; color: #6b4f23; flex: 1;">Editar</a>
+
+                    <form th:action="@{/admin/eliminar/{id}(id=${m.id})}" method="post"
+                        onsubmit="return confirm('¿Seguro que quieres eliminar esta mascota?')"
+                        style="flex: 1; margin: 0;">
+                        <button type="submit"
+                            style="background: #f5b971; color: white; width: 100%; height: 40px; margin: 0;">
+                            Eliminar
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div style="text-align:center; margin: 40px 0 60px 0; position: relative; z-index: 10;">
+        <a href="/" class="principal-link"
+            style="background: transparent; border: 2px solid #7ed4a6; color: #6b4f23; box-shadow: none;">
+            ← Volver al inicio
+        </a>
+    </div>
+
+    <script>
+        function filtrarMascotas() {
+            const texto = document.getElementById('searchInput').value.toLowerCase();
+            const tarjetas = document.getElementsByClassName('mascota-card');
+
+            for (let tarjeta of tarjetas) {
+                // 1. Obtenemos el nombre del <span>
+                const nombre = tarjeta.getElementsByClassName('mascota-nombre')[0].innerText.toLowerCase();
+
+                // 2. Obtenemos el tipo del atributo data-tipo que hemos guardado
+                const tipo = tarjeta.getAttribute('data-tipo').toLowerCase();
+
+                // 3. Si el texto coincide con el nombre O con el tipo, se muestra
+                if (nombre.includes(texto) || tipo.includes(texto)) {
+                    tarjeta.style.display = "";
+                } else {
+                    tarjeta.style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

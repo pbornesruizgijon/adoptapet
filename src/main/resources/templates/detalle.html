@@ -1,0 +1,104 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <title>AdoptaPet - Detalle</title>
+    <link rel="stylesheet" href="/base.css">
+    <link rel="stylesheet" href="/detalle.css">
+</head>
+
+<body>
+    <h2 th:text="${mascota.nombre}">Nombre</h2>
+
+    <img th:src="${mascota.imagen}" class="detalle-img" alt="Imagen de mascota" />
+
+    <div class="detalle-desc">
+        <p th:text="${mascota.descripcion}">Descripción</p>
+        <p><strong>Edad:</strong> <span th:text="${mascota.edad}">0</span> años</p>
+        <p><strong>Raza:</strong> <span th:text="${mascota.raza}">-</span></p>
+        <p><strong>Sexo:</strong> <span th:text="${mascota.sexo}">-</span></p>
+
+        <div style="margin-top: 15px; padding: 10px; background: rgba(126, 212, 166, 0.1); border-radius: 10px; border-left: 4px solid #7ed4a6;">
+            
+            <p th:if="${mascota instanceof T(com.example.adoptapet.model.Perro)}" style="margin: 0;">
+                <strong>Educación:</strong> 
+                <span th:text="${mascota.adiestrado ? '✅ Ya conoce órdenes básicas' : '⚠️ Necesita un poco de paciencia y adiestramiento'}"></span>
+            </p>
+
+            <p th:if="${mascota instanceof T(com.example.adoptapet.model.Gato)}" style="margin: 0;">
+                <strong>Salud:</strong> 
+                <span th:text="${mascota.esterilizado ? '✅ Ya está esterilizado/a' : '⏳ Pendiente de cita para esterilizar'}"></span>
+            </p>
+        </div>
+    </div>
+
+    <div style="margin: 20px 0;">
+        <span th:if="${mascota.adoptada}" class="adoptado">¡Ya tiene un hogar!</span>
+
+        <form sec:authorize="isAuthenticated()" th:if="${!mascota.adoptada}" th:action="@{/adoptar}" method="post"
+            style="display: inline-block;">
+            <input type="hidden" name="id" th:value="${mascota.id}" />
+            <button type="submit" class="btn-main" style="margin: 0; padding: 12px 40px; width: auto;">
+                ¡Adoptar!
+            </button>
+        </form>
+    </div>
+
+    <p th:if="${error}" th:text="${error}" class="error"></p>
+    <p th:if="${mensaje}" th:text="${mensaje}" style="color:green; font-weight: bold;"></p>
+
+    <div sec:authorize="hasAuthority('ADMIN')"
+        style="margin: 40px auto; padding: 25px; border: 2px dashed #7ed4a6; border-radius: 20px; max-width: 400px; background: rgba(255,255,255,0.5); position: relative; z-index: 10;">
+
+        <h3 style="margin-top:0; color: #6b4f23; margin-bottom: 20px;">Gestión Administrativa</h3>
+
+        <p th:if="${mascota.adoptada and mascota.adopter != null}"
+            style="background: #fff; padding: 12px; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; font-size: 0.9em;">
+            🏠 Adoptante: <strong th:text="${mascota.adopter.nombre}">Usuario</strong>
+        </p>
+
+        <p th:if="${mascota.adoptada and mascota.adopter == null}"
+            style="color: #d9534f; font-style: italic; margin-bottom: 15px; font-size: 0.9em;">
+            ⚠️ Adoptada (Sin datos del dueño)
+        </p>
+
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+
+            <form th:if="${mascota.adoptada}" th:action="@{/admin/anular-adopcion/{id}(id=${mascota.id})}" method="post"
+                style="margin:0; width: 100%;">
+                <button type="submit"
+                    style="background: #f5b971; color: white; width: 100%; margin: 0; box-shadow: none;"
+                    onclick="return confirm('¿Quieres liberar a esta mascota?')">
+                    Anular Adopción
+                </button>
+            </form>
+
+            <p th:if="${!mascota.adoptada}" style="color: #999; font-style: italic; margin: 5px 0;">
+                Disponible para adopción
+            </p>
+
+            <a th:href="@{/admin/editar/{id}(id=${mascota.id})}" class="principal-link"
+                style="width: 100%; margin: 0; padding: 12px; font-size: 1em; box-sizing: border-box;">
+                Editar Datos
+            </a>
+
+            <form th:action="@{/admin/eliminar/{id}(id=${mascota.id})}" method="post" style="margin:0; width: 100%;">
+                <button type="submit"
+                    style="background: #e74c3c; color: white; width: 100%; margin: 0; box-shadow: none;"
+                    onclick="return confirm('¿Eliminar permanentemente?')">
+                    Eliminar Mascota
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div style="margin-bottom: 50px;">
+        <a href="/lista" class="principal-link"
+            style="background: transparent; color: #6b4f23; border: 2px solid #7ed4a6; box-shadow: none;">
+            ← Volver a la lista
+        </a>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Adopciones - AdoptaPet</title>
+    <link rel="stylesheet" href="/base.css">
+    <link rel="stylesheet" href="/lista.css">
+</head>
+
+<body>
+    <div class="content mascota-list">
+        <h1>Mis mejores amigos</h1>
+        <h2>¡Gracias, <span th:text="${usuario}">Usuario</span>, por darles un hogar!</h2>
+
+        <div th:if="${#lists.isEmpty(mascotas)}"
+            style="text-align:center; margin-top:80px; position: relative; z-index: 10;">
+            <p style="font-size: 1.4em; color: #bca891; font-style: italic;">Aún no tienes compañeros en tu galería
+                personal.</p>
+            <a href="/lista" class="principal-link" style="margin-top:25px;">🐾 ¡Quiero adoptar uno!</a>
+        </div>
+
+        <div class="mascota-grid">
+            <div class="mascota-card" th:each="m : ${mascotas}" style="border: 2px solid #7ed4a6;">
+                <a th:href="@{'/detalle/' + ${m.id}}" class="mascota-card-link">
+                    <div style="position: relative;">
+                        <img th:src="${m.imagen}" alt="Foto de mascota" />
+
+                        <div
+                            style="position: absolute; top: 10px; right: 10px; background: #7ed4a6; color: white; border-radius: 50%; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; font-size: 18px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);">
+                            ✓
+                        </div>
+                    </div>
+                    <span class="mascota-nombre" th:text="${m.nombre}">Nombre</span>
+                </a>
+                <div
+                    style="margin-top: 10px; padding: 8px 15px; background: rgba(126, 212, 166, 0.1); border-radius: 10px; color: #5fb486; font-weight: bold; font-size: 0.9em; width: 100%; text-align: center;">
+                    🏠 En casa
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin: 60px 0; position: relative; z-index: 10;">
+            <a href="/" class="principal-link"
+                style="background: transparent; border: 2px solid #7ed4a6; color: #6b4f23; box-shadow: none;">
+                ← Volver al inicio
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>
